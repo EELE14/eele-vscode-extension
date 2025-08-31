@@ -69,33 +69,157 @@ This is a minimal, production-ready VS Code extension that adds **syntax highlig
 
 ```json
 {
-  "comments": {
-    "lineComment": "//",
-    "blockComment": ["/*", "*/"]
-  },
-  "brackets": [
-    ["{", "}"],
-    ["[", "]"],
-    ["(", ")"]
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "EELE",
+  "scopeName": "source.eele",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings-timespec" },
+    { "include": "#strings" },
+    { "include": "#regex" },
+    { "include": "#numbers" },
+    { "include": "#booleans-null" },
+    { "include": "#discord-context" },
+    { "include": "#keywords-declarations" },
+    { "include": "#keywords-control" },
+    { "include": "#events" },
+    { "include": "#discord-builtins" },
+    { "include": "#stdlib-builtins" },
+    { "include": "#operators" },
+    { "include": "#emoji" },
+    { "include": "#identifiers" }
   ],
-  "autoClosingPairs": [
-    { "open": "{", "close": "}" },
-    { "open": "[", "close": "]" },
-    { "open": "(", "close": ")" },
-    { "open": '"', "close": '"', "notIn": ["string"] },
-    { "open": "'", "close": "'", "notIn": ["string"] }
-  ],
-  "surroundingPairs": [
-    ["{", "}"],
-    ["[", "]"],
-    ["(", ")"],
-    ['"', '"'],
-    ["'", "'"]
-  ],
-  "folding": {
-    "markers": {
-      "start": "^\n?\s*//\s*#region",
-      "end": "^\n?\s*//\s*#endregion"
+  "repository": {
+    "comments": {
+      "patterns": [
+        { "name": "comment.line.double-slash.eele", "match": "//.*$" },
+        { "name": "comment.block.eele", "begin": "/\\*", "end": "\\*/" }
+      ]
+    },
+
+    "strings-timespec": {
+      "patterns": [
+        {
+          "name": "constant.other.timespec.eele",
+          "match": "\"(\\d+)(s|m|h|d)\""
+        }
+      ]
+    },
+
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.eele",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            { "name": "constant.character.escape.eele", "match": "\\\\[\\\\\"'nrvtbf]" }
+          ]
+        }
+      ]
+    },
+
+    "regex": {
+      "patterns": [
+        {
+          "name": "string.regexp.eele",
+          "begin": "/",
+          "end": "/",
+          "patterns": [
+            { "match": "\\\\/", "name": "constant.character.escape.eele" },
+            { "match": "\\\\.", "name": "constant.character.escape.eele" }
+          ]
+        }
+      ]
+    },
+
+    "numbers": {
+      "patterns": [
+        { "name": "constant.numeric.eele", "match": "(?<![\\w.])(?:\\d+)(?:\\.\\d+)?(?![\\w.])" }
+      ]
+    },
+
+    "booleans-null": {
+      "patterns": [
+        { "name": "constant.language.boolean.eele", "match": "(?i)\\b(TRUE|FALSE)\\b" },
+        { "name": "constant.language.null.eele", "match": "(?i)\\bNULL\\b" }
+      ]
+    },
+
+    "discord-context": {
+      "patterns": [
+        {
+          "name": "variable.language.discord.eele",
+          "match": "(?i)\\b(AUTHOR|CHANNEL|MESSAGE|GUILD|USER)\\b(?:\\.[A-Z_]+)*"
+        }
+      ]
+    },
+
+    "keywords-declarations": {
+      "patterns": [
+        { "name": "keyword.declaration.bot.eele", "match": "(?i)\\bBOT\\b" },
+        { "name": "keyword.declaration.var.eele", "match": "(?i)\\b(LET|CONST)\\b" },
+        { "name": "keyword.declaration.func.eele", "match": "(?i)\\bFUNC\\b" },
+        { "name": "keyword.other.module.eele", "match": "(?i)\\b(IMPORT|INCLUDE|EXPORT)\\b" }
+      ]
+    },
+
+    "keywords-control": {
+      "patterns": [
+        { "name": "keyword.control.conditional.eele", "match": "(?i)\\b(IF|ELSEIF|ELSE)\\b" },
+        { "name": "keyword.control.loop.eele", "match": "(?i)\\b(WHILE|LOOP|FOR|IN|BREAK|CONTINUE)\\b" },
+        { "name": "keyword.control.return.eele", "match": "(?i)\\bRETURN\\b" }
+      ]
+    },
+
+    "events": {
+      "patterns": [
+        { "name": "support.type.event.eele", "match": "(?i)\\bON\\b" },
+        { "name": "support.constant.event.eele", "match": "(?i)\\b(READY|MESSAGE|MATCH|REACTION_ADD|REACTION_REMOVE|MEMBER_JOIN|MEMBER_LEAVE|ERROR|SCHEDULE|EVERY|AT)\\b" }
+      ]
+    },
+
+    "discord-builtins": {
+      "patterns": [
+        { "name": "support.function.discord.eele", "match": "(?i)\\b(SAY|REPLY|DM|REACT|WAIT|SET_STATUS|FETCH|SEND|PUSH|POP|APPEND|REMOVE|ADD_ROLE|REMOVE_ROLE|BAN|UNBAN|TIMEOUT)\\b" },
+        { "name": "support.constant.fetch.eele", "match": "(?i)\\b(USER|CHANNEL|BY_ID|BY_NAME|AS|TO|WITH|ROLE|REASON|FOR)\\b" }
+      ]
+    },
+
+    "stdlib-builtins": {
+      "patterns": [
+        { "name": "support.function.builtin.eele", "match": "(?i)\\b(LEN|NOW|RANDOM|RANDOM_INT|FORMAT_DATETIME|ENV|JSON_PARSE|JSON_STRINGIFY|PRINT|LOG|ASSERT)\\b" }
+      ]
+    },
+
+    "operators": {
+      "patterns": [
+        { "name": "keyword.operator.logical.eele", "match": "(?i)\\b(AND|OR|NOT)\\b" },
+        { "name": "keyword.operator.comparison.eele", "match": "==|!=|>=|<=|>|<" },
+        { "name": "keyword.operator.arithmetic.eele", "match": "\\+|\\-|\\*|/|%" },
+        { "name": "punctuation.section.braces.begin.eele", "match": "\\{" },
+        { "name": "punctuation.section.braces.end.eele", "match": "\\}" },
+        { "name": "punctuation.section.group.begin.eele", "match": "\\(" },
+        { "name": "punctuation.section.group.end.eele", "match": "\\)" },
+        { "name": "punctuation.definition.list.begin.eele", "match": "\\[" },
+        { "name": "punctuation.definition.list.end.eele", "match": "\\]" },
+        { "name": "punctuation.separator.comma.eele", "match": "," },
+        { "name": "punctuation.separator.colon.eele", "match": ":" }
+      ]
+    },
+
+"emoji": {
+  "patterns": [
+    { "name": "constant.character.emoji.named.eele",   "match": ":[A-Za-z0-9_+\\-]+:" },
+    { "name": "constant.character.emoji.unicode.eele", "match": "[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]" }
+  ]
+},
+
+    "identifiers": {
+      "patterns": [
+        { "name": "entity.name.function.call.eele", "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\s*(?=\\()" },
+        { "name": "variable.other.readwrite.eele", "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b" }
+      ]
     }
   }
 }
@@ -248,12 +372,12 @@ TextMate grammar (Oniguruma regex). **Case-insensitive** matching is achieved wi
       ]
     },
 
-    "emoji": {
-      "patterns": [
-        { "name": "constant.character.emoji.named.eele", "match": ":[A-Za-z0-9_+\-]+:" },
-        { "name": "constant.character.emoji.unicode.eele", "match": "[\uD800-\uDBFF][\uDC00-\uDFFF]" }
-      ]
-    },
+"emoji": {
+  "patterns": [
+    { "name": "constant.character.emoji.named.eele",   "match": ":[A-Za-z0-9_+\\-]+:" },
+    { "name": "constant.character.emoji.unicode.eele", "match": "[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]" }
+  ]
+},
 
     "identifiers": {
       "patterns": [
@@ -286,7 +410,7 @@ A few handy snippets to speed up writing EELE scripts.
     "prefix": "ready",
     "body": [
       "ON READY {",
-      "  SAY \"Bereit! 👋\"",
+      "  SAY \"Ready! 👋\"",
       "}"
     ],
     "description": "ON READY event"
@@ -363,23 +487,5 @@ If VS Code doesn’t automatically pick up `.eele`, add this to your `settings.j
 
 ## How to run it
 
-1. Create a folder (e.g., `eele-vscode-extension`) and copy these files into it with the same structure.
-2. Open the folder in VS Code.
-3. Press **F5** to launch an Extension Development Host.
-4. Create a file `example.eele` and paste:
-
-   ```
-   BOT "MeinBot"
-
-   ON READY {
-     SAY "Bereit! 👋"
-   }
-
-   ON MESSAGE "!ping" {
-     SAY "pong!"
-   }
-   ```
-5. You should see proper highlighting.
-
-> Optional: Install globally by packaging with `vsce` (Node.js required).
+### Open VSCode extension manager and search for "EELE DSL — Syntax & Snippets"
 
