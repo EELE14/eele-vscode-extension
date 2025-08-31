@@ -1,6 +1,6 @@
 # EELE — VS Code Syntax Highlighting Extension
 
-This is a minimal, production-ready VS Code extension that adds **syntax highlighting** for your custom language **EELE** (files ending with `.eele`). It uses a **TextMate grammar** and follows the language design you provided (keywords, built-ins, comments, strings, numbers, regex, emojis, events, etc.).
+This is a minimal, production-ready VS Code extension that adds **syntax highlighting** for my custom language **EELE** (files ending with `.eele`). It uses a **TextMate grammar** and follows the language design you provided (keywords, built-ins, comments, strings, numbers, regex, emojis, events, etc.).
 
 > Quick start: Open this folder in VS Code and press **F5** to launch the Extension Development Host. Open any `*.eele` file to see highlighting.
 
